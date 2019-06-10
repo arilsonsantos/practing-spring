@@ -1,0 +1,3 @@
+# Rest Client for Visual Studio Code Extension
+
+http://localhost:8080/orion/api/v1/public/hello
