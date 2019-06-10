@@ -1,4 +1,4 @@
-package br.com.orion.loja.Exceptions;
+package br.com.orion.loja.exceptions;
 
 /**
  * ProductNotFoundException

@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.orion.loja.Exceptions.ProductNotFoundException;
 import br.com.orion.loja.entity.Product;
+import br.com.orion.loja.exceptions.ProductNotFoundException;
 import br.com.orion.loja.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 

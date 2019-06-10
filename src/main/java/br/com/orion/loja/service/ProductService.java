@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import br.com.orion.loja.Exceptions.ProductNotFoundException;
 import br.com.orion.loja.entity.Product;
+import br.com.orion.loja.exceptions.ProductNotFoundException;
 import br.com.orion.loja.repository.ProductRepository;
 
 /**
