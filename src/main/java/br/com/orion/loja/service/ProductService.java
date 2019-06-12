@@ -2,17 +2,19 @@ package br.com.orion.loja.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exceptions.ProductNotFoundException;
+import br.com.orion.loja.exceptions.ResourceNotFoundException;
 import br.com.orion.loja.repository.ProductRepository;
 
 /**
  * ProductService
  */
 @Service
-public class ProductService  {
+public class ProductService {
 
     private ProductRepository productRepository;
 
@@ -20,17 +22,21 @@ public class ProductService  {
         this.productRepository = productRepository;
     }
 
-
     public List<Product> findAll() {
         return productRepository.findAll();
     }
-    
-    public Product getById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
-    public Product save (Product product){
+    public Product getById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for ID : " + id));
+    }
+
+    public Product save(Product product) {
         return productRepository.save(product);
     }
-    
+
 }
