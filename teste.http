@@ -1,3 +1,12 @@
 # Rest Client for Visual Studio Code Extension
 
 http://localhost:8080/orion/api/v1/public/hello
+
+###
+
+http://localhost:8080/orion/api/v1/protected/products
+
+
+###
+
+http://localhost:8080/orion/api/v1/protected/products/pageable?sort=id,desc&sort=name,asc

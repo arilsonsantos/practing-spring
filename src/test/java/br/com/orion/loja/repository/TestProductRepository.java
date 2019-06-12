@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exceptions.ProductNotFoundException;
+import br.com.orion.loja.exceptions.ResourceNotFoundException;
 import br.com.orion.loja.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,7 +60,7 @@ public class TestProductRepository {
 
     @Test
     public void getById() {
-        thrown.expect(ProductNotFoundException.class);
+        thrown.expect(ResourceNotFoundException.class);
         log.info("Trying to get a product by an inexistent ID");
         productService.getById(-1L);
     }
