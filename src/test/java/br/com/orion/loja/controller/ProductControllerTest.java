@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -97,6 +98,17 @@ public class ProductControllerTest {
         ResponseEntity<String> product = restTemplate.getForEntity(URI_PROCTECTED + "/pageable", String.class);
         Assertions.assertThat(product.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(pages.getNumberOfElements()).isEqualTo(2L);
+    }
+
+    // get
+
+    @Test
+    public void getProductReturnStatusCode404() {
+        Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
+        BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
+        ResponseEntity<Product> response = restTemplate.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET, null,
+                Product.class, 1);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 }

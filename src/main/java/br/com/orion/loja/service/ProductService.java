@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exceptions.ResourceNotFoundException;
 import br.com.orion.loja.repository.ProductRepository;
 
 /**
@@ -31,8 +30,7 @@ public class ProductService {
     }
 
     public Product getById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found for ID : " + id));
+        return productRepository.findById(id).orElse(null);
     }
 
     public Product save(Product product) {
