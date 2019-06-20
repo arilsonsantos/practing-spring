@@ -28,11 +28,13 @@ public class TestProductRepository {
     @Autowired
     private ProductService productService;
 
+    
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void createShouldPersistData() {
+    public void createShouldPersistDataTest() {
         Product product = createProduct();
         productService.save(product);
         log.info("ID PRODUCT: " + product.getId());
@@ -47,7 +49,7 @@ public class TestProductRepository {
     }
 
     @Test
-    public void throwConstraintViolationExceptionNameNull() {
+    public void saveNameNullThrowConstraintViolationExceptionTest() {
         thrown.expect(ConstraintViolationException.class);
         
         Product product = createProduct();
@@ -59,7 +61,7 @@ public class TestProductRepository {
     }
 
     @Test
-    public void getById() {
+    public void getByIdResourceNotFoundExceptionTest() {
         thrown.expect(ResourceNotFoundException.class);
         log.info("Trying to get a product by an inexistent ID");
         productService.getById(-1L);

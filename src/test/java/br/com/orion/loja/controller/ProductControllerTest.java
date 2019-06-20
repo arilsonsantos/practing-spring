@@ -41,7 +41,8 @@ public class ProductControllerTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplateProtected;
+
 
     private static final String URI_PROCTECTED = "/v1/protected/products";
 
@@ -49,7 +50,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsStringReturn200Test() {
-        ResponseEntity<String> exchange = restTemplate.exchange(URI_PROCTECTED, HttpMethod.GET, null, String.class);
+        ResponseEntity<String> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null, String.class);
 
         exchange.getBody();
         assertThat(exchange.getStatusCode()).isEqualTo(OK);
@@ -57,7 +58,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsListReturn200Test() {
-        ResponseEntity<List<Product>> exchange = restTemplate.exchange(URI_PROCTECTED, HttpMethod.GET, null,
+        ResponseEntity<List<Product>> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Product>>() {
                 });
 
@@ -67,7 +68,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsPageableReturn200Test() {
-        ResponseEntity<PageableResponseWrapper<Product>> exchange = restTemplate.exchange(
+        ResponseEntity<PageableResponseWrapper<Product>> exchange = restTemplateProtected.exchange(
                 URI_PROCTECTED + "/pageable?page=2&sort=name,desc&sort=id,asc", HttpMethod.GET, null,
                 new ParameterizedTypeReference<PageableResponseWrapper<Product>>() {
                 });
@@ -76,18 +77,18 @@ public class ProductControllerTest {
         assertThat(exchange.getStatusCode()).isEqualTo(OK);
     }
 
-    // findAll using Mock
+    // findAll using BDDMockito
 
     @Test
     public void findAllProductReturnStatusCode200UsingMockTest() {
         List<Product> products = Arrays.asList(new Product(1L, "Product 01"), new Product(2L, "Product 02"));
         BDDMockito.when(productRepository.findAll()).thenReturn(products);
-        ResponseEntity<String> product = restTemplate.getForEntity(URI_PROCTECTED, String.class);
+        ResponseEntity<String> product = restTemplateProtected.getForEntity(URI_PROCTECTED, String.class);
         Assertions.assertThat(product.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    public void test() {
+    public void testingPageable() {
         int pageNumber = 0;
         int pageSize = 1;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -95,7 +96,7 @@ public class ProductControllerTest {
         Page<Product> productsPage = new PageImpl<>(products);
         BDDMockito.when(productRepository.findAll(pageable)).thenReturn(productsPage);
         Page<Product> pages = productRepository.findAll(pageable);
-        ResponseEntity<String> product = restTemplate.getForEntity(URI_PROCTECTED + "/pageable", String.class);
+        ResponseEntity<String> product = restTemplateProtected.getForEntity(URI_PROCTECTED + "/pageable", String.class);
         Assertions.assertThat(product.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(pages.getNumberOfElements()).isEqualTo(2L);
     }
@@ -103,12 +104,14 @@ public class ProductControllerTest {
     // get
 
     @Test
-    public void getProductReturnStatusCode404() {
+    public void getProductReturnStatusCode404Test() {
         Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
-        ResponseEntity<Product> response = restTemplate.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET, null,
+        ResponseEntity<Product> response = restTemplateProtected.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET, null,
                 Product.class, 1);
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
+
+
 
 }
