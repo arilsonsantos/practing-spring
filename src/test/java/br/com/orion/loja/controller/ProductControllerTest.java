@@ -109,7 +109,7 @@ public class ProductControllerTest {
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
         ResponseEntity<Product> response = restTemplateProtected.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET, null,
                 Product.class, 1);
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 

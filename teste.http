@@ -9,4 +9,4 @@ http://localhost:8080/orion/api/v1/protected/products
 
 ###
 
-http://localhost:8080/orion/api/v1/protected/products/pageable?sort=id,desc&sort=name,asc
+http://localhost:8080/orion/api/v1/protected/products/pageable?sort=name,asc&sort=id,desc&page=2
