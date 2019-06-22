@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class ProductController {
         return "Hello";
     }
     
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping(path = "protected/products")
     public ResponseEntity<?> findAll() {
         return new ResponseEntity<>(productService.findAll(), OK);
