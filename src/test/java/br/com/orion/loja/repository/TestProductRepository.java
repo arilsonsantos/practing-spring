@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exceptions.ResourceNotFoundException;
 import br.com.orion.loja.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,8 +27,6 @@ public class TestProductRepository {
     @Autowired
     private ProductService productService;
 
-    
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -41,7 +38,6 @@ public class TestProductRepository {
         assertThat(product.getId()).isNotNull();
     }
 
-
     private Product createProduct() {
         Product product = new Product();
         product.setName("PRODUCT 50 TESTE");
@@ -51,20 +47,13 @@ public class TestProductRepository {
     @Test
     public void saveNameNullThrowConstraintViolationExceptionTest() {
         thrown.expect(ConstraintViolationException.class);
-        
+
         Product product = createProduct();
         product.setName(null);
 
         log.info("Trying to save a product with null name");
         productService.save(product);
 
-    }
-
-    @Test
-    public void getByIdResourceNotFoundExceptionTest() {
-        thrown.expect(ResourceNotFoundException.class);
-        log.info("Trying to get a product by an inexistent ID");
-        productService.getById(-1L);
     }
 
 }

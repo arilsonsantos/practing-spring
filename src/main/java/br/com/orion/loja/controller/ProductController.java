@@ -28,9 +28,9 @@ public class ProductController {
         this.productService = productService;
     }
 
+    
     @GetMapping(path = "public/hello")
     public String helloWorld() {
-
         return "Hello";
     }
     
