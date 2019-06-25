@@ -1,6 +1,7 @@
 package br.com.orion.loja.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +30,8 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
-    public Product getById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public Optional<Product> getById(Long id) {
+        return productRepository.findById(id);
     }
 
     public Product save(Product product) {
