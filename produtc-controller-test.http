@@ -5,4 +5,14 @@ http://localhost:8080/orion/api/v1/public/hello
 ###
 
 http://localhost:8080/orion/api/v1/protected/products
-Authorization: Basic maria 1234
+Authorization: Basic joao 1234
+
+### 
+
+http://localhost:8080/orion/api/v1/protected/products/-1
+Authorization: Basic joao 1234
+
+###
+
+http://localhost:8080/orion/api/v1/protected/products/pageagle
+Authorization: Basic joao 1234
