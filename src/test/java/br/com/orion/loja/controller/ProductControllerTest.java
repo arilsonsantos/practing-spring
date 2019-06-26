@@ -46,14 +46,15 @@ public class ProductControllerTest {
     @Autowired
     private TestRestTemplate restTemplateProtected;
 
-
     private static final String URI_PROCTECTED = "/v1/protected/products";
+
+    private static final String URI_ADMIN = "/v1/admin/products";
 
     @TestConfiguration
     static class InnerAuthenticationTest {
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
-            return new RestTemplateBuilder().basicAuthentication("joao", "1234");
+            return new RestTemplateBuilder().basicAuthentication("maria", "1234");
         }
 
     }
@@ -62,7 +63,8 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsStringReturn200Test() {
-        ResponseEntity<String> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null, String.class);
+        ResponseEntity<String> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null,
+                String.class);
 
         exchange.getBody();
         assertThat(exchange.getStatusCode()).isEqualTo(OK);
@@ -119,11 +121,18 @@ public class ProductControllerTest {
     public void getProductReturnStatusCode404Test() {
         Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
-        ResponseEntity<Product> response = restTemplateProtected.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET, null,
-                Product.class, 1);
+        ResponseEntity<Product> response = restTemplateProtected.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET,
+                null, Product.class, 1);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-
+    @Test
+    public void createReturnStatusCode200() {
+        restTemplateProtected = restTemplateProtected.withBasicAuth("maria", "1234");
+        
+        Product product = new Product(0L, "PRODUCT 42");
+        ResponseEntity<String> response = restTemplateProtected.postForEntity(URI_ADMIN, product, String.class);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
 
 }
