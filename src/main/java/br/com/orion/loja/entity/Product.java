@@ -9,8 +9,10 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 
@@ -20,6 +22,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(of = "id")
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product implements Serializable{
 
     private static final long serialVersionUID = -9219503984838382945L;
