@@ -2,9 +2,12 @@ package br.com.orion.loja.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +31,13 @@ public class ProductController {
         this.productService = productService;
     }
 
+    
     @GetMapping(path = "public/hello")
     public String helloWorld() {
-
         return "Hello";
     }
     
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping(path = "protected/products")
     public ResponseEntity<?> findAll() {
         return new ResponseEntity<>(productService.findAll(), OK);
@@ -46,19 +50,17 @@ public class ProductController {
     }
 
 
+    @PreAuthorize("hasRole('USUARIO')")
     @GetMapping(path = "protected/products/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        verifyIfStudentExists(id);
-        Product product = productService.getById(id);
+        Product product = getProductOrThrowsException(id);
 
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
     
-    private void verifyIfStudentExists(Long id) {
-        Product product = productService.getById(id);
-
-        if (product == null) {
-            throw new ResourceNotFoundException("Product not found for ID: " + id);
-        }
+    private Product getProductOrThrowsException(Long id) {
+        Optional<Product> product = productService.getById(id);
+        return product.orElseThrow(() -> new ResourceNotFoundException("Product not found for ID: " + id));
     }
+    
 }
