@@ -24,6 +24,10 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+        .and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
+        .and().headers().frameOptions().sameOrigin();
+
         http
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -32,6 +36,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter{
         .anyRequest()
         .authenticated()
         .and()
+        .csrf().disable()
         .httpBasic();
     }
     
