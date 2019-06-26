@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,9 +45,6 @@ public class ProductControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplateProtected;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private static final String URI_PROCTECTED = "/v1/protected/products";
 
