@@ -18,13 +18,13 @@ public class AccessDeniedExceptionHandler implements IResourceExceptionHandler{
         
         ErrorDetail resourceNotFoundDetail = ErrorDetail.Builder
         .newBuilder().timestamp(new Date().getTime())
-        .status(HttpStatus.NOT_FOUND.value())
+        .status(HttpStatus.UNAUTHORIZED.value())
         .title("Resource not found")
         .detail(exception.getMessage())
         .developerMessage(exception.getClass().getName())
         .build();
         
-        return new ResponseEntity<>(resourceNotFoundDetail, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(resourceNotFoundDetail, HttpStatus.UNAUTHORIZED);
     }
 
    
