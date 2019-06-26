@@ -16,3 +16,14 @@ Authorization: Basic joao 1234
 
 http://localhost:8080/orion/api/v1/protected/products/pageagle
 Authorization: Basic joao 1234
+
+###
+
+POST http://localhost:8080/orion/api/v1/admin/products
+Authorization: Basic maria 1234
+Content-Type: application/json
+
+{
+    "id": 0,
+    "name": "PRODUCT 251"
+}

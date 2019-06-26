@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * Student
+ * Product class
  */
 @Data
 @EqualsAndHashCode(of = "id")
