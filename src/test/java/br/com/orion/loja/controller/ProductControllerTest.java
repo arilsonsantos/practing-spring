@@ -20,10 +20,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,17 +41,17 @@ public class ProductControllerTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private TestRestTemplate restTemplateProtected;
+    private TestRestTemplate restTemplate;
+
 
     private static final String URI_PROCTECTED = "/v1/protected/products";
-
     private static final String URI_ADMIN = "/v1/admin/products";
 
     @TestConfiguration
     static class InnerAuthenticationTest {
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
-            return new RestTemplateBuilder().basicAuthentication("maria", "1234");
+            return new RestTemplateBuilder().basicAuthentication("joao", "1234");
         }
 
     }
@@ -63,8 +60,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsStringReturn200Test() {
-        ResponseEntity<String> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null,
-                String.class);
+        ResponseEntity<String> exchange = restTemplate.exchange(URI_PROCTECTED, HttpMethod.GET, null, String.class);
 
         exchange.getBody();
         assertThat(exchange.getStatusCode()).isEqualTo(OK);
@@ -72,7 +68,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsListReturn200Test() {
-        ResponseEntity<List<Product>> exchange = restTemplateProtected.exchange(URI_PROCTECTED, HttpMethod.GET, null,
+        ResponseEntity<List<Product>> exchange = restTemplate.exchange(URI_PROCTECTED, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Product>>() {
                 });
 
@@ -82,7 +78,7 @@ public class ProductControllerTest {
 
     @Test
     public void findAllProductsAsPageableReturn200Test() {
-        ResponseEntity<PageableResponseWrapper<Product>> exchange = restTemplateProtected.exchange(
+        ResponseEntity<PageableResponseWrapper<Product>> exchange = restTemplate.exchange(
                 URI_PROCTECTED + "/pageable?page=2&sort=name,desc&sort=id,asc", HttpMethod.GET, null,
                 new ParameterizedTypeReference<PageableResponseWrapper<Product>>() {
                 });
@@ -91,48 +87,65 @@ public class ProductControllerTest {
         assertThat(exchange.getStatusCode()).isEqualTo(OK);
     }
 
-    // findAll using BDDMockito
+    @Test
+    public void createReturnStatusCode200() {
+        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        
+        Product product = new Product(0L, "PRODUCT 42");
+        ResponseEntity<String> response = restTemplate.postForEntity(URI_ADMIN, product, String.class);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    /* 
+        Using BDDMockito 
+    */
 
     @Test
     public void findAllProductReturnStatusCode200UsingMockTest() {
         List<Product> products = Arrays.asList(new Product(1L, "Product 01"), new Product(2L, "Product 02"));
         BDDMockito.when(productRepository.findAll()).thenReturn(products);
-        ResponseEntity<String> product = restTemplateProtected.getForEntity(URI_PROCTECTED, String.class);
+        ResponseEntity<String> product = restTemplate.getForEntity(URI_PROCTECTED, String.class);
         Assertions.assertThat(product.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    public void testingPageable() {
-        int pageNumber = 0;
-        int pageSize = 1;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<Product> products = Arrays.asList(new Product(1L, "Product 01"), new Product(2L, "Product 02"));
-        Page<Product> productsPage = new PageImpl<>(products);
-        BDDMockito.when(productRepository.findAll(pageable)).thenReturn(productsPage);
-        Page<Product> pages = productRepository.findAll(pageable);
-        ResponseEntity<String> product = restTemplateProtected.getForEntity(URI_PROCTECTED + "/pageable", String.class);
-        Assertions.assertThat(product.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(pages.getNumberOfElements()).isEqualTo(2L);
     }
 
     // get
 
     @Test
     public void getProductReturnStatusCode404Test() {
+        restTemplate = restTemplate.withBasicAuth("maria", "1234");
         Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
-        ResponseEntity<Product> response = restTemplateProtected.exchange(URI_PROCTECTED + "/{id}", HttpMethod.GET,
+
+        ResponseEntity<Product> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.GET,
                 null, Product.class, 1);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+    
+    // put
 
     @Test
-    public void createReturnStatusCode200() {
-        restTemplateProtected = restTemplateProtected.withBasicAuth("maria", "1234");
-        
-        Product product = new Product(0L, "PRODUCT 42");
-        ResponseEntity<String> response = restTemplateProtected.postForEntity(URI_ADMIN, product, String.class);
+    public void createProductReturnStatusCode201Test() {
+        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        Product product = new Product(1L, "Product 01");
+        HttpEntity<?> request = new HttpEntity<>(product);
+        BDDMockito.when(productRepository.save(product)).thenReturn(product);
+
+        ResponseEntity<Product> response = restTemplate.exchange(URI_ADMIN, HttpMethod.POST, request, Product.class);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+    
+    // delete
+
+    @Test
+    public void deleteProductReturnStatusCode200Test() {
+        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        Product product = new Product(1L, "Product 01");
+
+        BDDMockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+
+        ResponseEntity<String> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.DELETE, null,
+                String.class, 1L);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 }
