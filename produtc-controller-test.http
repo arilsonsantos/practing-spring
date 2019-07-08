@@ -1,26 +1,28 @@
+@host = http://localhost:8080/orion/api/v1
+
 # Rest Client for Visual Studio Code Extension
 
-http://localhost:8080/orion/api/v1/public/hello
+{{host}}/public/hello
 
 ###
 
-http://localhost:8080/orion/api/v1/protected/products
-Authorization: Basic joao 1234
+{{host}}/protected/products
+Authorization: Basic joao 123
 
 ### 
 
-http://localhost:8080/orion/api/v1/protected/products/-1
-Authorization: Basic joao 1234
+{{host}}/admin/products/-1
+Authorization: Basic joao 123
 
 ###
 
-http://localhost:8080/orion/api/v1/protected/products/pageagle
-Authorization: Basic joao 1234
+{{host}}/admin/products/pageable?page=2&sort=name,desc&sort=id,asc
+Authorization: Basic maria 123
 
 ###
 
-POST http://localhost:8080/orion/api/v1/admin/products
-Authorization: Basic maria 1234
+{{host}}/admin/products
+Authorization: Basic maria 123
 Content-Type: application/json
 
 {

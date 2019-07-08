@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +42,6 @@ public class ProductController {
         return "Hello";
     }
     
-    @PreAuthorize("hasRole('USUARIO')")
     @GetMapping(path = "protected/products")
     public ResponseEntity<?> findAll() {
         return new ResponseEntity<>(productService.findAll(), OK);
@@ -56,7 +54,6 @@ public class ProductController {
     }
 
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping(path = "admin/products/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails principal) {
         System.out.println(principal);
@@ -65,7 +62,6 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping(path = "admin/products")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> create(@RequestBody Product product) {
@@ -73,7 +69,6 @@ public class ProductController {
         return new ResponseEntity<>(productCreated, HttpStatus.CREATED);
     }
     
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @DeleteMapping(path = "admin/products/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Product product = getProductOrThrowsException(id);
