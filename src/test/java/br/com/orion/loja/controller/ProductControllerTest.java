@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -24,7 +25,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import br.com.orion.loja.entity.Product;
 import br.com.orion.loja.repository.ProductRepository;
@@ -35,6 +40,7 @@ import br.com.orion.loja.wrapper.PageableResponseWrapper;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 public class ProductControllerTest {
 
     @MockBean
@@ -43,15 +49,21 @@ public class ProductControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private MockMvc mockMvc;
+
+
     private static final String URI_PROCTECTED = "/v1/protected/products";
     private static final String URI_ADMIN = "/v1/admin/products";
 
+    //Default USER to tests
     @TestConfiguration
     static class InnerAuthenticationTest {
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
             return new RestTemplateBuilder().basicAuthentication("joao", "123");
         }
+
     }
 
     // findAll
@@ -146,6 +158,22 @@ public class ProductControllerTest {
         ResponseEntity<String> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.DELETE, null,
                 String.class, 1L);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    /* 
+    *
+    * Using MockMVC 
+    *
+    */
+
+    @Test
+    //To use this annotation is needed to add the spring-secutirity-test dependency 
+    @WithMockUser (username = "maria", password = "123", roles = {"ADMINISTRADOR"})
+    public void deleteProductReturnStatusCode200MocMVCTest() throws Exception {
+        Product product = new Product(1L, "Product 01");
+        BDDMockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/admin/products/{id}", 1L))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
 }
