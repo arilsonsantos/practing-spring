@@ -43,7 +43,6 @@ public class ProductControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-
     private static final String URI_PROCTECTED = "/v1/protected/products";
     private static final String URI_ADMIN = "/v1/admin/products";
 
@@ -51,9 +50,8 @@ public class ProductControllerTest {
     static class InnerAuthenticationTest {
         @Bean
         public RestTemplateBuilder restTemplateBuilder() {
-            return new RestTemplateBuilder().basicAuthentication("joao", "1234");
+            return new RestTemplateBuilder().basicAuthentication("joao", "123");
         }
-
     }
 
     // findAll
@@ -89,7 +87,7 @@ public class ProductControllerTest {
 
     @Test
     public void createReturnStatusCode200() {
-        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        restTemplate = restTemplate.withBasicAuth("maria", "123");
         
         Product product = new Product(0L, "PRODUCT 42");
         ResponseEntity<String> response = restTemplate.postForEntity(URI_ADMIN, product, String.class);
@@ -97,7 +95,9 @@ public class ProductControllerTest {
     }
 
     /* 
-        Using BDDMockito 
+    *
+    * Using BDDMockito 
+    *
     */
 
     @Test
@@ -112,7 +112,7 @@ public class ProductControllerTest {
 
     @Test
     public void getProductReturnStatusCode404Test() {
-        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        restTemplate = restTemplate.withBasicAuth("maria", "123");
         Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
 
@@ -125,7 +125,7 @@ public class ProductControllerTest {
 
     @Test
     public void createProductReturnStatusCode201Test() {
-        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        restTemplate = restTemplate.withBasicAuth("maria", "123");
         Product product = new Product(1L, "Product 01");
         HttpEntity<?> request = new HttpEntity<>(product);
         BDDMockito.when(productRepository.save(product)).thenReturn(product);
@@ -138,7 +138,7 @@ public class ProductControllerTest {
 
     @Test
     public void deleteProductReturnStatusCode200Test() {
-        restTemplate = restTemplate.withBasicAuth("maria", "1234");
+        restTemplate = restTemplate.withBasicAuth("maria", "123");
         Product product = new Product(1L, "Product 01");
 
         BDDMockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));

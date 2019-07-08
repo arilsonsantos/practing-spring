@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
     @Test
     public void teste(){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String code = passwordEncoder.encode("1234");
+        String code = passwordEncoder.encode("123");
         System.out.println(code);
     }
     
