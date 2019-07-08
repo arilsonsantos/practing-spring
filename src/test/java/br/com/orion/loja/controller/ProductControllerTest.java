@@ -98,9 +98,8 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void createReturnStatusCode200() {
+    public void createReturnStatusCode201() {
         restTemplate = restTemplate.withBasicAuth("maria", "123");
-        
         Product product = new Product(0L, "PRODUCT 42");
         ResponseEntity<String> response = restTemplate.postForEntity(URI_ADMIN, product, String.class);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -113,7 +112,7 @@ public class ProductControllerTest {
     */
 
     @Test
-    public void findAllProductReturnStatusCode200UsingMockTest() {
+    public void findAllProductReturnStatusCode200UsingBDDMockitoTest() {
         List<Product> products = Arrays.asList(new Product(1L, "Product 01"), new Product(2L, "Product 02"));
         BDDMockito.when(productRepository.findAll()).thenReturn(products);
         ResponseEntity<String> product = restTemplate.getForEntity(URI_PROCTECTED, String.class);
@@ -123,20 +122,31 @@ public class ProductControllerTest {
     // get
 
     @Test
-    public void getProductReturnStatusCode404Test() {
+    public void getOneProductReturnStatusCode200Test() {
+        restTemplate = restTemplate.withBasicAuth("maria", "123");
+        Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
+        BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
+
+        ResponseEntity<Product> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.GET, null,
+                Product.class, 1);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+    
+    @Test
+    public void getOneProductReturnStatusCode404Test() {
         restTemplate = restTemplate.withBasicAuth("maria", "123");
         Optional<Product> product = Optional.of(new Product(1L, "Product 01"));
         BDDMockito.when(productRepository.findById(1L)).thenReturn(product);
 
         ResponseEntity<Product> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.GET,
-                null, Product.class, 1);
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+                null, Product.class, -1);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
     
-    // put
+    // post
 
     @Test
-    public void createProductReturnStatusCode201Test() {
+    public void createProductReturnStatusCode201UsingBDDMockitoTest() {
         restTemplate = restTemplate.withBasicAuth("maria", "123");
         Product product = new Product(1L, "Product 01");
         HttpEntity<?> request = new HttpEntity<>(product);
@@ -149,7 +159,7 @@ public class ProductControllerTest {
     // delete
 
     @Test
-    public void deleteProductReturnStatusCode200Test() {
+    public void deleteProductReturnStatusCode200UsingBDDMockitoTest() {
         restTemplate = restTemplate.withBasicAuth("maria", "123");
         Product product = new Product(1L, "Product 01");
 
