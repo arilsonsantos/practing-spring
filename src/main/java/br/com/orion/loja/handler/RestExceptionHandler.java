@@ -22,10 +22,8 @@ public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> exceptionHandler(RuntimeException runtimeException) throws Throwable {
-
         IResourceExceptionHandler resourceException = getInstance(runtimeException);
         return resourceException.exceptionHandler(runtimeException);
-
     }
 
     private IResourceExceptionHandler getInstance(RuntimeException runtimeException) throws Throwable {
