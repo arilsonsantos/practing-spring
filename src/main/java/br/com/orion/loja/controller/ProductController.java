@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exceptions.ResourceNotFoundException;
+import br.com.orion.loja.exception.ResourceNotFoundException;
 import br.com.orion.loja.service.ProductService;
 
 /**

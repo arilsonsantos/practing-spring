@@ -1,4 +1,4 @@
-package br.com.orion.loja.exceptions;
+package br.com.orion.loja.exception;
 
 /**
  * ResourceNotFoundException
