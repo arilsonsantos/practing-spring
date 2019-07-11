@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import br.com.orion.loja.exceptions.ErrorDetail;
+import br.com.orion.loja.exception.ErrorDetail;
 
 /**
  * RestExceptionHandler
