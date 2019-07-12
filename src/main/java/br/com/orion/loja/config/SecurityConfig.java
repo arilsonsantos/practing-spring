@@ -33,27 +33,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-        .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-        .and()
-        .authorizeRequests()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and().cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        .and().authorizeRequests()
+        .anyRequest()
+        .authenticated()
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
         .antMatchers("/*/protected/**").hasAnyRole("ADMINISTRADOR", "USUARIO")
         .antMatchers(HttpMethod.GET, "/user/sign-up").permitAll()
-        .and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
-        .and().headers().frameOptions().sameOrigin();
-
-        http
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .httpBasic()
-        .and()
-        .cors();
-        
+        //Use it when the CSRF is active
+        //.and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
+        .and().headers().frameOptions().sameOrigin()
+        .and().httpBasic()
+        .and().csrf().disable();
     }
     
 
