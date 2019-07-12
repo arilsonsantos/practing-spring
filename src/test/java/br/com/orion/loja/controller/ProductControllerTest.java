@@ -41,6 +41,7 @@ import br.com.orion.loja.wrapper.PageableResponseWrapper;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+
 public class ProductControllerTest {
 
     @MockBean
