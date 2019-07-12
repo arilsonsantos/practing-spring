@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
         .antMatchers("/*/protected/**").hasAnyRole("ADMINISTRADOR", "USUARIO")
         .antMatchers(HttpMethod.GET, "/user/sign-up").permitAll()
-        //Use it when the CSRF is active
+        //Use it when the CSRF is enable
         //.and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
         .and().headers().frameOptions().sameOrigin()
         .and().httpBasic()
