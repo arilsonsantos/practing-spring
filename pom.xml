@@ -19,6 +19,8 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<log4j.version>2.11.2</log4j.version>
+		<springloaded.version>1.2.8.RELEASE</springloaded.version>
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
 		<spring-security-test.version>5.1.5.RELEASE</spring-security-test.version>
 	</properties>
 
@@ -85,14 +87,14 @@
 					<dependency>
 						<groupId>org.springframework</groupId>
 						<artifactId>springloaded</artifactId>
-						<version>1.2.8.RELEASE</version>
+						<version>${springloaded.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
