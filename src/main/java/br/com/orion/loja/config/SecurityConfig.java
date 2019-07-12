@@ -2,7 +2,6 @@ package br.com.orion.loja.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,7 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authenticated()
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
         .antMatchers("/*/protected/**").hasAnyRole("ADMINISTRADOR", "USUARIO")
-        .antMatchers(HttpMethod.GET, "/user/sign-up").permitAll()
         //Use it when the CSRF is enable
         //.and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
         .and().headers().frameOptions().sameOrigin()
