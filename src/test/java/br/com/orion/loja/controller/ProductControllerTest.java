@@ -57,6 +57,8 @@ public class ProductControllerTest {
     private static final String URI_PROCTECTED = "/v1/protected/products";
     private static final String URI_ADMIN = "/v1/admin/products";
 
+    
+
     //Default USER to tests
     @TestConfiguration
     static class InnerAuthenticationTest {
@@ -176,6 +178,16 @@ public class ProductControllerTest {
     * Using MockMVC 
     *
     */
+
+    @Test
+    //To use this annotation is needed to add the spring-secutirity-test dependency 
+    @WithMockUser (username = "joao", password = "123", roles = {"USUARIO"})
+    public void deleteProductReturnStatusCode403MocMVCTest() throws Exception {
+        Product product = new Product(1L, "Product 01");
+        BDDMockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/admin/products/{id}", 1L))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
 
     @Test
     //To use this annotation is needed to add the spring-secutirity-test dependency 
