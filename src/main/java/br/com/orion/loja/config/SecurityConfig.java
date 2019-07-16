@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
         .antMatchers("/*/protected/**").hasAnyRole("USUARIO")
         .antMatchers("/h2-console/**").permitAll()
-        //.anyRequest().authenticated()
+        .anyRequest().authenticated()
         .and()
         .httpBasic()
         .and()
