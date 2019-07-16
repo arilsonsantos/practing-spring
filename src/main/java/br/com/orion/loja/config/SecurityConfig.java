@@ -2,16 +2,13 @@ package br.com.orion.loja.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
 
 import br.com.orion.loja.service.UserDetailApplicationService;
 
@@ -33,20 +30,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and().cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-        .and().authorizeRequests()
-        .anyRequest()
-        .authenticated()
+        //.csrf().disable()
+        //.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        //.and()
+        //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        //.and()
+        .authorizeRequests()
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
-        .antMatchers("/*/protected/**").hasAnyRole("ADMINISTRADOR", "USUARIO")
-        .antMatchers(HttpMethod.GET, "/user/sign-up").permitAll()
-        //Use it when the CSRF is enable
-        //.and().httpBasic().and().csrf().ignoringAntMatchers("/h2-console/**")
-        .and().headers().frameOptions().sameOrigin()
-        .and().httpBasic()
-        .and().csrf().disable();
+        .antMatchers("/*/protected/**").hasAnyRole("USUARIO")
+        .antMatchers("/h2-console/**").permitAll()
+        //.anyRequest().authenticated()
+        .and()
+        .httpBasic()
+        .and()
+        .headers().frameOptions().sameOrigin()
+        ;
     }
     
 
