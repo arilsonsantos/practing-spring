@@ -21,7 +21,7 @@ import br.com.orion.loja.repository.UserRepository;
 public class UserDetailApplicationService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private  String strRoles = "";
+    private String strRoles;
 
     public UserDetailApplicationService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -32,6 +32,7 @@ public class UserDetailApplicationService implements UserDetailsService {
         User user = Optional.ofNullable(userRepository.findByUsernameFetchRole(username))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         
+        strRoles = "";                
         List<String> rolesNames = user.getRoles().stream().map(u -> u.getName()).collect(Collectors.toList());
         rolesNames.forEach(rn -> strRoles += "ROLE_" + rn + ",");
         List<GrantedAuthority> roles = AuthorityUtils.commaSeparatedStringToAuthorityList(strRoles);
