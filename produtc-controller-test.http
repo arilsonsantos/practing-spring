@@ -1,5 +1,8 @@
 @host = http://localhost:8080/orion/api/v1
 
+{{host}}
+###
+
 # Rest Client for Visual Studio Code Extension
 
 {{host}}/public/hello
@@ -7,12 +10,17 @@
 ###
 
 {{host}}/protected/products
-Authorization: Basic joao 123
+Authorization: Basic maria 123
 
 ### 
 
-{{host}}/admin/products/-1
-Authorization: Basic joao 123
+{{host}}/admin/products/2
+Authorization: Basic maria 123
+
+### 
+
+DELETE {{host}}/admin/products/2
+Authorization: Basic maria 123
 
 ###
 
@@ -21,8 +29,8 @@ Authorization: Basic maria 123
 
 ###
 
-{{host}}/admin/products
-Authorization: Basic maria 123
+POST {{host}}/admin/products
+Authorization: Basic joao 123
 Content-Type: application/json
 
 {
