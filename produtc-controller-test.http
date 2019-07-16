@@ -1,4 +1,4 @@
-@host = http://localhost:8080/orion/api/v1
+@host = http://localhost:8085/orion/api/v1
 
 {{host}}
 ###
@@ -14,7 +14,7 @@ Authorization: Basic maria 123
 
 ### 
 
-{{host}}/admin/products/2
+{{host}}/admin/products/1
 Authorization: Basic maria 123
 
 ### 
