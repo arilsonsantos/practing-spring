@@ -173,6 +173,17 @@ public class ProductControllerTest {
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Test
+    public void deleteProductReturnStatusCode403UsingBDDMockitoTest() {
+        Product product = new Product(1L, "Product 01");
+
+        BDDMockito.when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+
+        ResponseEntity<String> response = restTemplate.exchange(URI_ADMIN + "/{id}", HttpMethod.DELETE, null,
+                String.class, 1L);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
     /* 
     *
     * Using MockMVC 
