@@ -48,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .headers().frameOptions().sameOrigin()
         ;
     }
-    
 
     @Bean
     public PasswordEncoder passwordEncoder() {
