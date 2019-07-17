@@ -3,6 +3,8 @@ package br.com.orion.loja.handler;
 import java.lang.reflect.Constructor;
 import java.util.Date;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,21 @@ public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
         IResourceExceptionHandler resourceException = (IResourceExceptionHandler) constructor.newInstance();
         return resourceException;
     }
+
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handlePropertyReferenceException(ConstraintViolationException exception) {
+        ErrorDetail details = ErrorDetail.Builder
+        .newBuilder().timestamp(new Date().getTime())
+        .status(HttpStatus.NOT_FOUND.value())
+        .title("Reference not found")
+        .detail(exception.getMessage())
+        .developerMessage(exception.getClass().getName())
+        .build();
+
+        return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
+    }
+    
 
     @ExceptionHandler
     @Override
