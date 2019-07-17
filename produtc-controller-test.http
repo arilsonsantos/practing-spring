@@ -3,19 +3,17 @@
 {{host}}
 ###
 
-# Rest Client for Visual Studio Code Extension
-
 {{host}}/public/hello
 
 ###
 
 {{host}}/protected/products
-Authorization: Basic maria 123
+Authorization: Basic maria 124
 
 ### 
 
-{{host}}/admin/products/1
-Authorization: Basic maria 123
+{{host}}/admin/products/2
+Authorization: Basic joao 123
 
 ### 
 
@@ -24,19 +22,8 @@ Authorization: Basic maria 123
 
 ###
 
-{{host}}/admin/products/pageable?page=2&sort=name,desc&sort=id,asc
+{{host}}/protected/products/pageable?page=1&&&sort=name,desc&sort=id,asc
 Authorization: Basic maria 123
-
-###
-
-POST {{host}}/admin/products
-Authorization: Basic joao 123
-Content-Type: application/json
-
-{
-    "id": 0,
-    "name": "PRODUCT 251"
-}
 
 ###
 
@@ -46,16 +33,5 @@ Content-Type: application/json
 
 {
     "id": 0,
-    "name": "PRODUCT 251"
-}
-
-###
-
-POST {{host}}/admin/products
-Authorization: Basic maria 123
-Content-Type: application/json
-
-{
-    "id": 0,
-    "name": 
+    "name": ""
 }
