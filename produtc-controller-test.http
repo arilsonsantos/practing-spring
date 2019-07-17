@@ -1,4 +1,4 @@
-@host = http://localhost:8085/orion/api/v1
+@host = http://localhost:8080/orion/api/v1
 
 {{host}}
 ###
@@ -36,4 +36,26 @@ Content-Type: application/json
 {
     "id": 0,
     "name": "PRODUCT 251"
+}
+
+###
+
+POST {{host}}/admin/products
+Authorization: Basic maria 123
+Content-Type: application/json
+
+{
+    "id": 0,
+    "name": "PRODUCT 251"
+}
+
+###
+
+POST {{host}}/admin/products
+Authorization: Basic maria 123
+Content-Type: application/json
+
+{
+    "id": 0,
+    "name": 
 }
