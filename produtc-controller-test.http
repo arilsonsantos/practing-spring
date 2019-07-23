@@ -24,18 +24,18 @@ Authorization: Basic maria 123
 
 ###
 
-{{host}}/admin/products/pageable?page=2&sort=name,desc&sort=id,asc
+{{host}}/protected/products/pageable?size=3&sort=name,asc&sort=id,asc
 Authorization: Basic maria 123
 
 ###
 
 POST {{host}}/admin/products
-Authorization: Basic joao 123
+Authorization: Basic maria 123
 Content-Type: application/json
 
 {
     "id": 0,
-    "name": "PRODUCT 251"
+    "name": "251"
 }
 
 ###
@@ -57,5 +57,5 @@ Content-Type: application/json
 
 {
     "id": 0,
-    "name": 
+    "name": "pp"
 }
