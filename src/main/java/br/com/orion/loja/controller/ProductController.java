@@ -4,6 +4,8 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +66,7 @@ public class ProductController {
 
     @PostMapping(path = "admin/products")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> create(@RequestBody Product product) {
+    public ResponseEntity<?> create(@Valid @RequestBody Product product) {
         Product productCreated = productService.save(product);
         return new ResponseEntity<>(productCreated, HttpStatus.CREATED);
     }
