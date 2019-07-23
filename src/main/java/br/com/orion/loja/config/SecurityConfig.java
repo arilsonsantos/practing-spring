@@ -1,5 +1,7 @@
 package br.com.orion.loja.config;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .exceptionHandling().authenticationEntryPoint((req, resp, e)-> resp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
         .and()
         .authorizeRequests()
         .antMatchers("/*/admin/**").hasRole("ADMINISTRADOR")
