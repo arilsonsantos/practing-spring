@@ -1,7 +1,6 @@
 package br.com.orion.loja.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -29,7 +28,7 @@ public class UserDetailApplicationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = Optional.ofNullable(userRepository.findByUsernameFetchRole(username))
+        User user = userRepository.findByUsernameFetchRole(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         
         strRoles = "";                
