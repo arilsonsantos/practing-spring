@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,6 +70,13 @@ public class ProductController {
     public ResponseEntity<?> create(@Valid @RequestBody Product product) {
         Product productCreated = productService.save(product);
         return new ResponseEntity<>(productCreated, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "admin/products")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> update(@Valid @RequestBody Product product) {
+        productService.save(product);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @DeleteMapping(path = "admin/products/{id}")
