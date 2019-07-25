@@ -75,6 +75,7 @@ public class ProductController {
     @PutMapping(path = "admin/products")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> update(@Valid @RequestBody Product product) {
+        getProductOrThrowsException(product.getId());
         productService.save(product);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
