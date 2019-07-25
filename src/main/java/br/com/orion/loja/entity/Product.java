@@ -33,7 +33,7 @@ public class Product implements Serializable{
     private Long id;
     
     @NotBlank
-    @Size(min = 5, max=100)
+    @Size(min = 5, max=100, message = "{product.name.size}")
     private String name;
 
 }
