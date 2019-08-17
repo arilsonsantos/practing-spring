@@ -33,7 +33,7 @@ public class ProductRepositoryTest {
     @Test
     public void createShouldPersistDataTest() {
         Product product = createProduct();
-        productService.save(product);
+        productService.insert(product);
         log.info("ID PRODUCT: " + product.getId());
         assertThat(product.getId()).isNotNull();
     }
@@ -52,7 +52,7 @@ public class ProductRepositoryTest {
         product.setName(null);
 
         log.info("Trying to save a product with null name");
-        productService.save(product);
+        productService.insert(product);
 
     }
 

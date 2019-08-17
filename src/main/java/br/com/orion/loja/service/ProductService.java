@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.orion.loja.entity.Product;
+import br.com.orion.loja.exception.ResourceNotFoundException;
 import br.com.orion.loja.repository.ProductRepository;
 
 /**
@@ -34,12 +35,23 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Product save(Product product) {
+    public Product insert(Product product) {
+        return productRepository.save(product);
+    }
+
+    public Product update(Product product) {
+        getProductOrThrowsException(product.getId());
         return productRepository.save(product);
     }
 
     public void delete(Long id) {
+        getProductOrThrowsException(id);
         productRepository.deleteById(id);
+    }
+
+    public Product getProductOrThrowsException(Long id) {
+        Optional<Product> product = getById(id);
+        return product.orElseThrow(() -> new ResourceNotFoundException("Product not found for ID: " + id));
     }
 
 }
