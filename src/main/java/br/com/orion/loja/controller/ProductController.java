@@ -2,8 +2,6 @@ package br.com.orion.loja.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.orion.loja.entity.Product;
-import br.com.orion.loja.exception.ResourceNotFoundException;
 import br.com.orion.loja.service.ProductService;
 
 /**
@@ -60,7 +57,7 @@ public class ProductController {
     @GetMapping(path = "admin/products/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails principal) {
         System.out.println(principal);
-        Product product = getProductOrThrowsException(id);
+        Product product = productService.getProductOrThrowsException(id);
 
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
@@ -68,28 +65,21 @@ public class ProductController {
     @PostMapping(path = "admin/products")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> create(@Valid @RequestBody Product product) {
-        Product productCreated = productService.save(product);
+        Product productCreated = productService.insert(product);
         return new ResponseEntity<>(productCreated, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "admin/products")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> update(@Valid @RequestBody Product product) {
-        getProductOrThrowsException(product.getId());
-        productService.save(product);
+        productService.update(product);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @DeleteMapping(path = "admin/products/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Product product = getProductOrThrowsException(id);
-        productService.delete(product.getId());
+        productService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private Product getProductOrThrowsException(Long id) {
-        Optional<Product> product = productService.getById(id);
-        return product.orElseThrow(() -> new ResourceNotFoundException("Product not found for ID: " + id));
-    }
-    
 }
